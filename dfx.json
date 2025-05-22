@@ -1,0 +1,16 @@
+{
+  "canisters": {
+    "sneed_dedup_backend": {
+      "main": "src/sneed_dedup_backend/main.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "mops sources"
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

@@ -1,0 +1,17 @@
+[package]
+name = "dedup"
+version = "1.0.0"
+description = "Deduplication Utility"
+repository = "https://github.com/icsneed/sneed_dedup"
+keywords = [
+  "dedup",
+  "deduplication",
+  "indexing",
+  "enumeration",
+  "normalization"
+]
+license = "MIT"
+
+[dependencies]
+vector = "0.4.1"
+map = "9.0.1"
