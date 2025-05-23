@@ -178,7 +178,7 @@ let index2 = dedup.getOrCreateIndex(blob2);
 
 ```motoko
 actor {
-    stable var dedupState: ?Dedup.DedupState = null;
+    stable var dedupState: ?Dedup.DedupState = ?Dedup.empty();
 
     // use as class
     var dedup = Dedup.Dedup(dedupState);
