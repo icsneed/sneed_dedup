@@ -104,4 +104,57 @@ do {
     Debug.print("Class methods tests passed!");
 };
 
+// Test fromBlobs method
+do {
+    Debug.print("Testing fromBlobs method...");
+    
+    // Test fromBlobs with empty vector
+    let emptyBlobs = Vector.new<Blob>();
+    let emptyState = Dedup.fromBlobs(emptyBlobs);
+    assert(Dedup.getBlob(emptyState, 0) == null);
+    assert(Dedup.getIndex(emptyState, makeBlob("test")) == null);
+    
+    // Test fromBlobs with existing blobs
+    let testBlobs = Vector.new<Blob>();
+    let blob1 = makeBlob("test1");
+    let blob2 = makeBlob("test2");
+    let principal1 = makePrincipal("aaaaa-aa");
+    let principalBlob = Principal.toBlob(principal1);
+    
+    Vector.add(testBlobs, blob1);
+    Vector.add(testBlobs, blob2);
+    Vector.add(testBlobs, principalBlob);
+    
+    let reconstructedState = Dedup.fromBlobs(testBlobs);
+    
+    // Verify blobs can be retrieved by index
+    assert(Dedup.getBlob(reconstructedState, 0) == ?blob1);
+    assert(Dedup.getBlob(reconstructedState, 1) == ?blob2);
+    assert(Dedup.getBlob(reconstructedState, 2) == ?principalBlob);
+    assert(Dedup.getBlob(reconstructedState, 3) == null);
+    
+    // Verify indices can be retrieved by blob
+    assert(Dedup.getIndex(reconstructedState, blob1) == ?0);
+    assert(Dedup.getIndex(reconstructedState, blob2) == ?1);
+    assert(Dedup.getIndex(reconstructedState, principalBlob) == ?2);
+    assert(Dedup.getIndex(reconstructedState, makeBlob("nonexistent")) == null);
+    
+    // Verify principal methods work
+    assert(Dedup.getIndexForPrincipal(reconstructedState, principal1) == ?2);
+    assert(Dedup.getPrincipalForIndex(reconstructedState, 2) == ?principal1);
+    
+    // Verify adding new blobs works correctly
+    let blob3 = makeBlob("test3");
+    let newIndex = Dedup.getOrCreateIndex(reconstructedState, blob3);
+    assert(newIndex == 3);
+    assert(Dedup.getBlob(reconstructedState, 3) == ?blob3);
+    assert(Dedup.getIndex(reconstructedState, blob3) == ?3);
+    
+    // Verify existing blobs still return same indices
+    assert(Dedup.getOrCreateIndex(reconstructedState, blob1) == 0);
+    assert(Dedup.getOrCreateIndex(reconstructedState, blob2) == 1);
+    
+    Debug.print("fromBlobs method tests passed!");
+};
+
 Debug.print("All tests passed!");

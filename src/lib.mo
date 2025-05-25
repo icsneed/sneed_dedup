@@ -7,6 +7,7 @@ import Nat32 "mo:base/Nat32";
 import Principal "mo:base/Principal";
 import Vector "mo:vector";
 import Map "mo:map/Map";
+import Iter "mo:base/Iter";
 
 module {
     let blobUtils : (Blob -> Nat32, (Blob, Blob) -> Bool) = (Blob.hash, Blob.equal);
@@ -21,6 +22,19 @@ module {
         {
             blobs = Vector.new<Blob>();
             blobToIndex = Map.new<Blob, Nat32>();
+        }
+    };
+
+    public func fromBlobs(blobs: Vector.Vector<Blob>) : DedupState {
+        let blobToIndex = Map.new<Blob, Nat32>();
+        let size = Vector.size(blobs);
+        for (i in Iter.range(0, size - 1)) {
+            let blob = Vector.get(blobs, i);
+            Map.set(blobToIndex, blobUtils, blob, Nat32.fromNat(i));
+        };
+        {
+            blobs;
+            blobToIndex;
         }
     };
 
